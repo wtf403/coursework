@@ -1,20 +1,22 @@
 [tool.poetry]
-name = "backend"
-version = "0.1.0"
-description = ""
-authors = ["Max Kiselev <maaaaath@yandex.ru>"]
-readme = "README.md"
+name = 'backend'
+version = '0.1.0'
+description = ''
+authors = ['Max Kiselev <maaaaath@yandex.ru>']
+readme = 'README.md'
 
 [tool.poetry.dependencies]
-python = "^3.9"
-Django = "^4.0.5"
-Pillow = "^9.1.1"
-psycopg2 = "^2.9.3"
-python-dotenv = "^0.20.0"
+python = '^3.9'
+Django = '^4.0.5'
+Pillow = '^9.1.1'
+psycopg2 = '^2.9.3'
+python-dotenv = '^0.20.0'
+djangorestframework = '^3.13.1'
+djangorestframework-simplejwt = '^5.2.0'
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ['poetry-core']
+build-backend = 'poetry.core.masonry.api'
 
 [tool.poetry.scripts]
-dev = "my_package_name:log_revision.py"
+dev = 'my_package_name:log_revision.py'

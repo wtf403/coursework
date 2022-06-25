@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
+from director.serializers import DirectorSerializer
+from director.models import Director
 
-# Create your views here.
+class DirectorViewSet(ModelViewSet):
+    queryset = Director.objects.all()
+    serializer_class = DirectorSerializer 

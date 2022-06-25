@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
+from actor.serializers import ActorSerializer
+from actor.models import Actor
 
-# Create your views here.
+class ActorViewSet(ModelViewSet):
+    queryset = Actor.objects.all()
+    serializer_class = ActorSerializer 

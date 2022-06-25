@@ -1,4 +1,3 @@
-import email
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
@@ -9,18 +8,18 @@ from video.models import Video
 
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
-    first_name = models.CharField(verbose_name="Имя", max_length=64)
-    last_name = models.CharField(verbose_name="Фамилия", max_length=64)
-    email = models.EmailField(verbose_name="Почта", max_length=64, unique=True)
-    photo = models.ImageField(verbose_name="Аватарка", upload_to='users/photos', blank=True)
+    first_name = models.CharField(verbose_name='Имя', max_length=64)
+    last_name = models.CharField(verbose_name='Фамилия', max_length=64)
+    email = models.EmailField(verbose_name='Почта', max_length=64, unique=True)
+    photo = models.ImageField(verbose_name='Аватарка', upload_to='users/photos', blank=True)
     
-    actor = models.ManyToManyField(verbose_name="Любимые актёры", to=Actor, related_name="user", blank=True)
-    director = models.ManyToManyField(verbose_name="Любимые режисёры", to=Director, related_name="user", blank=True)
-    video = models.ManyToManyField(verbose_name="Любимые видео", to=Video, related_name="user", blank=True)
-
-    is_active = models.BooleanField(verbose_name="Активирован", default=False)
-    is_staff = models.BooleanField(verbose_name="Персонал", default=False)
-    is_superuser = models.BooleanField(verbose_name="Администратор", default=False)
+    video = models.ManyToManyField(verbose_name='Любимые видео', to=Video, related_name='user', blank=True)
+    actor = models.ManyToManyField(verbose_name='Любимый актёр', to=Actor, related_name='user', blank=True)
+    director = models.ManyToManyField(verbose_name='Любимые режисёр', to=Director, related_name='user', blank=True)
+    
+    is_active = models.BooleanField(verbose_name='Активирован', default=False)
+    is_staff = models.BooleanField(verbose_name='Персонал', default=False)
+    is_superuser = models.BooleanField(verbose_name='Администратор', default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', ]

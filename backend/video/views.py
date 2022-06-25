@@ -1,6 +1,11 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from rest_framework.viewsets import ModelViewSet
+from video.serializers import VideoSerializer
+from video.models import Video
+from rest_framework.decorators import action
+from authentication.models import User
+from rest_framework.permissions import IsAuthenticated
 
-# Create your views here.
-def video_list(request):
-    return JsonResponse(data={'status': 'ok'})
+class VideoViewSet(ModelViewSet):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer 
+    
