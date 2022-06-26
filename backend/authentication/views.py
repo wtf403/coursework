@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from video.models import Video
+from director.models import Director
+from actor.models import Actor
 # Create your views here.
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
@@ -47,24 +49,61 @@ class UserViewSet(ModelViewSet):
         data = self.serializer_class(user).data
         return Response(data)
 
-    @action(methods=['POST'], detail=True, permission_classes=[IsAuthenticated], url_path='toggle-favorite-video')
-    def toggle_favorite(self, request, pk=None):
-        video_id = request.POST.get('video_id')
+    @action(methods=['POST'], detail=True, permission_classes=[IsAuthenticated], url_path='toggle-favourite-video')
+    def toggle_favourite_video(self, request, pk=None):
         try:
-            print('try')
-            User.objects.get(id=pk).video.get(id=video_id)
-            videos = User.objects.get(id=pk).video.exclude(id=video_id)
-            User.objects.get(id=pk).video.set(videos, clear=True)
+            user = User.objects.get(id=pk)
+        except User.DoesNotExist:
+            raise NotFound('user not found')
+        try:
+            video_id = request.POST.get('video_id')
+            video = Video.objects.get(id=video_id)
+        except Video.DoesNotExist:
+            raise NotFound('video not found')
+        try:
+            user.video.get(id=video_id)
+            videos = user.video.exclude(id=video_id)
+            user.video.set(videos, clear=True)
             return Response({'message': 'removed'})
         except:
-            print('except')
-            video = Video.objects.get(id=video_id)
-            print(type(video))
-            User.objects.get(id=pk).video.add(video)
+            user.video.add(video)
             return Response({'message': 'added'})
 
-
-
-
-
-
+    @action(methods=['POST'], detail=True, permission_classes=[IsAuthenticated], url_path='toggle-favourite-director')
+    def toggle_favourite_director(self, request, pk=None):
+        try:
+            user = User.objects.get(id=pk)
+        except User.DoesNotExist:
+            raise NotFound('user not found')
+        try:
+            director_id = request.POST.get('director_id')
+            director = Director.objects.get(id=director_id)
+        except Director.DoesNotExist:
+            raise NotFound('director not found')
+        try:
+            user.director.get(id=director_id)
+            directors = user.director.exclude(id=director_id)
+            user.director.set(directors, clear=True)
+            return Response({'message': 'removed'})
+        except:
+            user.director.add(director)
+            return Response({'message': 'added'})
+    @action(methods=['POST'], detail=True, permission_classes=[IsAuthenticated], url_path='toggle-favourite-actor')
+    def toggle_favourite_actor(self, request, pk=None):
+        try:
+            user = User.objects.get(id=pk)
+        except User.DoesNotExist:
+            raise NotFound('user not found')
+        try:
+            actor_id = request.POST.get('actor_id')
+            actor = Actor.objects.get(id=actor_id)
+        except Actor.DoesNotExist:
+            raise NotFound('actor not found')
+        try:
+            user.actor.get(id=actor_id)
+            actors = user.actor.exclude(id=actor_id)
+            user.actor.set(actors, clear=True)
+            return Response({'message': 'removed'})
+        except:
+            user.actor.add(actor)
+            return Response({'message': 'added'})
