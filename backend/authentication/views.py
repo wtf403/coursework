@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response 
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+from video.models import Video
 # Create your views here.
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
@@ -46,10 +47,21 @@ class UserViewSet(ModelViewSet):
         data = self.serializer_class(user).data
         return Response(data)
 
-    @action(methods=["POST"],detail=False, permission_classes=[IsAuthenticated], url_path='toggle-favorite')
-    def toggle_favorite_video(self, request):
-        pass
-
+    @action(methods=['POST'], detail=True, permission_classes=[IsAuthenticated], url_path='toggle-favorite-video')
+    def toggle_favorite(self, request, pk=None):
+        video_id = request.POST.get('video_id')
+        try:
+            print('try')
+            User.objects.get(id=pk).video.get(id=video_id)
+            videos = User.objects.get(id=pk).video.exclude(id=video_id)
+            User.objects.get(id=pk).video.set(videos, clear=True)
+            return Response({'message': 'removed'})
+        except:
+            print('except')
+            video = Video.objects.get(id=video_id)
+            print(type(video))
+            User.objects.get(id=pk).video.add(video)
+            return Response({'message': 'added'})
 
 
 

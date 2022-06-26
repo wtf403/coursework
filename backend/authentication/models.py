@@ -14,8 +14,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     photo = models.ImageField(verbose_name='Аватарка', upload_to='users/photos', blank=True)
     
     video = models.ManyToManyField(verbose_name='Любимые видео', to=Video, related_name='user', blank=True)
-    actor = models.ManyToManyField(verbose_name='Любимый актёр', to=Actor, related_name='user', blank=True)
-    director = models.ManyToManyField(verbose_name='Любимые режисёр', to=Director, related_name='user', blank=True)
+    actor = models.ManyToManyField(verbose_name='Любимые актёры', to=Actor, related_name='user', blank=True)
+    director = models.ManyToManyField(verbose_name='Любимые режисёры', to=Director, related_name='user', blank=True)
     
     is_active = models.BooleanField(verbose_name='Активирован', default=False)
     is_staff = models.BooleanField(verbose_name='Персонал', default=False)
@@ -32,3 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+
+    def delete(self, id):
+        self.video.get(id=id).delete()

@@ -5,10 +5,6 @@ from director.models import Director
 from actor.models import Actor
 from video.models import Video
 
-class VideoSerializerForUser(serializers.ModelSerializer):
-    class Meta:
-        model = Video
-        fields = '__all__'
 
 class DirectorSerializerForUser(serializers.ModelSerializer):
     class Meta:
@@ -20,6 +16,12 @@ class ActorSerializerForUser(serializers.ModelSerializer):
         model = Actor
         fields = '__all__'
     
+class VideoSerializerForUser(serializers.ModelSerializer):
+    actors = ActorSerializerForUser(source='actor', many=True)
+    directors = DirectorSerializerForUser(source='director', many=True)
+    class Meta:
+        model = Video
+        exclude = ['director', 'actor', 'genre', 'studio']
 
 class UserSerializer(serializers.ModelSerializer):
     videos = VideoSerializerForUser(source='video', many=True)
