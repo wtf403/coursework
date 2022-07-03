@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from video.models import Video
 from director.models import Director
 from actor.models import Actor
+
 # Create your views here.
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()

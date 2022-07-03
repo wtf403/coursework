@@ -1,3 +1,5 @@
+from tkinter import CASCADE
+from xml.etree.ElementTree import Comment
 from django.db import models
 from studio.models import Studio
 from genre.models import Genre
@@ -25,8 +27,8 @@ class Video(models.Model):
     budget = models.CharField(verbose_name='Бюджет', max_length=64)
     fees = models.CharField(verbose_name='Сборы', max_length=64)
     
-    studio = models.ManyToManyField(verbose_name='Стyдия', to=Studio, related_name='video')
-    genre = models.ManyToManyField(verbose_name='Жанр', to=Genre, related_name='video')
+    studio = models.ManyToManyField(verbose_name='Стyдии', to=Studio, related_name='video')
+    genre = models.ManyToManyField(verbose_name='Жанры', to=Genre, related_name='video')
     
     def __str__(self):
         return self.title
