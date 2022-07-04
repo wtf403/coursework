@@ -59,6 +59,7 @@ class UserViewSet(ModelViewSet):
         try:
             video_id = request.POST.get('video_id')
             video = Video.objects.get(id=video_id)
+            print(request.data)
         except Video.DoesNotExist:
             raise NotFound('video not found')
         try:

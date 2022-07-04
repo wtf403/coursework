@@ -27,6 +27,21 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-dry-rest-permissions"
+version = "1.2.0"
+description = "Rules based permissions for the Django Rest Framework"
+category = "main"
+optional = false
+python-versions = "*"
+develop = false
+
+[package.source]
+type = "git"
+url = "https://github.com/FJNR-inc/dry-rest-permissions"
+reference = "HEAD"
+resolved_reference = "1510b159b9ee6c04df0aef64db6ef6337178ecf1"
+
+[[package]]
 name = "djangorestframework"
 version = "3.13.1"
 description = "Web APIs for Django, made easy."
@@ -149,7 +164,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = '^3.9'
-content-hash = "8572051b8697e2db7f5989cd345d4378b6bcf8424b23399a62454daa48913f37"
+content-hash = "b37b2f0e31e50e56c5f24a3fadfa5c266003000aa60b72003afaffed6c4f14ce"
 
 [metadata.files]
 asgiref = [
@@ -160,6 +175,7 @@ django = [
     {file = "Django-4.0.5-py3-none-any.whl", hash = "sha256:502ae42b6ab1b612c933fb50d5ff850facf858a4c212f76946ecd8ea5b3bf2d9"},
     {file = "Django-4.0.5.tar.gz", hash = "sha256:f7431a5de7277966f3785557c3928433347d998c1e6459324501378a291e5aab"},
 ]
+django-dry-rest-permissions = []
 djangorestframework = [
     {file = "djangorestframework-3.13.1-py3-none-any.whl", hash = "sha256:24c4bf58ed7e85d1fe4ba250ab2da926d263cd57d64b03e8dcef0ac683f8b1aa"},
     {file = "djangorestframework-3.13.1.tar.gz", hash = "sha256:0c33407ce23acc68eca2a6e46424b008c9c02eceb8cf18581921d0092bc1f2ee"},

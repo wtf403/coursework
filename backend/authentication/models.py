@@ -22,7 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(verbose_name='Администратор', default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', ]
+    REQUIRED_FIELDS = ['first_name', 'last_name']
     
     objects = UserManager()
 

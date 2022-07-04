@@ -13,7 +13,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.user.email
-
+    
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комменатрии'
+
+    
