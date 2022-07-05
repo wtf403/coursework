@@ -1,4 +1,5 @@
 from itertools import permutations
+from tokenize import Token
 from urllib import response
 from rest_framework.exceptions import ValidationError, NotFound, AuthenticationFailed
 from rest_framework.viewsets import ModelViewSet
@@ -6,17 +7,17 @@ from authentication.models import User
 from authentication.serializers import UserSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response 
-from rest_framework_simplejwt.tokens import AccessToken, RefreshToken, Token
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from video.models import Video
 from director.models import Director
 from actor.models import Actor
+
 
 # Create your views here.
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAdminUser]
 
     @action(methods=['POST'], permission_classes=[AllowAny], detail=False, url_path='register')
     def regiser(self, request):
@@ -60,23 +61,26 @@ class UserViewSet(ModelViewSet):
     @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated], url_path='logout')
     def logout(self, request):
         response = Response()
-        user = request.user
-        refresh = RefreshToken().for_user(user)
-        refresh.blacklist()
         response.data = {'logout': 'successfully'}
+        ref = request.COOKIES.get('refresh')
+        refresh_token = RefreshToken(ref)
+        refresh_token.blacklist()
+        response.delete_cookie('refresh')
+        response.delete_cookie('access')
         return response
     
-    # @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated], url_path='refresh')
-    # def refresh(self, request):
-    #     ref = request.COOKIES.get('refresh') 
-    #     refresh = RefreshToken.for_user(request.user)
-    #     response = Response()
-    #     refresh.blacklist()
-    #     response.delete_cookie('refresh')
-    #     response.set_cookie('refresh', str(refresh))
-
-    #     response.data = {'access': str(refresh.access_token), 'refresh': str(refresh)}
-    #     return response
+    @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated], url_path='refresh')
+    def refresh(self, request):
+        response = Response()
+        ref = request.COOKIES.get('refresh')
+        token = RefreshToken(ref)
+        token.blacklist()
+        response.delete_cookie('refresh')
+        refresh = RefreshToken()
+        response.set_cookie('refresh', str(refresh))
+        response.set_cookie('access', str(refresh.access_token))
+        response.data = {'access': str(refresh.access_token), 'refresh': str(refresh)}
+        return response
 
     @action(methods=['POST'], detail=True, permission_classes=[IsAuthenticated], url_path='toggle-favourite-video')
     def toggle_favourite_video(self, request, pk=None):

@@ -18,18 +18,18 @@ from django.urls import path, include
 from core.routers import router, comment_router
 from django.conf.urls.static import static
 from django.conf import settings
-from rest_framework_simplejwt.views import (
-    TokenRefreshView,
-    TokenObtainPairView,
-    TokenBlacklistView,
-)
+# from rest_framework_simplejwt.views import (
+#     TokenRefreshView,
+#     TokenObtainPairView,
+#     TokenBlacklistView,
+# )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path(r'api/user/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path(r'api/user/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path(r'api/user/token/logout/', TokenBlacklistView.as_view(), name='token_logout'),
+    # path(r'api/user/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path(r'api/user/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path(r'api/user/token/logout/', TokenBlacklistView.as_view(), name='token_logout'),
     path('api/', include(comment_router.urls)),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
