@@ -8,6 +8,7 @@ from comment.views import CommentViewSet
 from authentication.views import UserViewSet
 from rest_framework_nested import routers
 
+
 router = routers.DefaultRouter()
 router.register(r'videos', VideoViewSet)
 comment_router = routers.NestedSimpleRouter(router, r'videos', lookup='video')
@@ -17,4 +18,5 @@ router.register('comments', CommentViewSet)
 router.register('directors', DirectorViewSet)
 router.register('studios', StudioViewSet)
 router.register('video_types', VideoTypeViewSet)
-router.register('auth', UserViewSet)
+router.register('user', UserViewSet)
+

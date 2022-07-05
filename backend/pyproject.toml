@@ -14,7 +14,7 @@ python-dotenv = '^0.20.0'
 djangorestframework = '^3.13.1'
 djangorestframework-simplejwt = '^5.2.0'
 drf-nested-routers = {git = "https://github.com/alanjds/drf-nested-routers"}
-django-dry-rest-permissions = {git = "https://github.com/FJNR-inc/dry-rest-permissions"}
+django-cors-headers = "^3.13.0"
 
 [build-system]
 requires = ['poetry-core']

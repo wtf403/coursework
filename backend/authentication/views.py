@@ -6,8 +6,8 @@ from authentication.models import User
 from authentication.serializers import UserSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response 
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken, Token
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from video.models import Video
 from director.models import Director
 from actor.models import Actor
@@ -16,8 +16,9 @@ from actor.models import Actor
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
 
-    @action(methods=['POST'], detail=False, url_path='register')
+    @action(methods=['POST'], permission_classes=[AllowAny], detail=False, url_path='register')
     def regiser(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -25,7 +26,7 @@ class UserViewSet(ModelViewSet):
 
         return Response({'massage': 'success'})
 
-    @action(methods=['POST'], detail=False, url_path='login')
+    @action(methods=['POST'], permission_classes=[AllowAny], detail=False, url_path='login')
     def login(self, request):
         if 'email' not in request.data:
             raise ValidationError({'error': 'email must not be empty'})
@@ -39,16 +40,43 @@ class UserViewSet(ModelViewSet):
         if not user.check_password(request.data['password']):
             raise AuthenticationFailed({'error': 'incorrect password'})
 
-        refrash = RefreshToken.for_user(user)
+        refresh = RefreshToken.for_user(user)
+
         response = Response()
-        response.data = {'access': str(refrash.access_token)}
+        response.set_cookie('refresh', str(refresh))
+        response.set_cookie('access', str(refresh.access_token))
+        response.data = {'access': str(refresh.access_token), 'refresh': str(refresh)}
         return response
+
+    
     
     @action(methods=['GET'], detail=False, permission_classes=[IsAuthenticated], url_path='me')
     def get_user(self, request):
         user = request.user
         data = self.serializer_class(user).data
         return Response(data)
+
+
+    @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated], url_path='logout')
+    def logout(self, request):
+        response = Response()
+        user = request.user
+        refresh = RefreshToken().for_user(user)
+        refresh.blacklist()
+        response.data = {'logout': 'successfully'}
+        return response
+    
+    # @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated], url_path='refresh')
+    # def refresh(self, request):
+    #     ref = request.COOKIES.get('refresh') 
+    #     refresh = RefreshToken.for_user(request.user)
+    #     response = Response()
+    #     refresh.blacklist()
+    #     response.delete_cookie('refresh')
+    #     response.set_cookie('refresh', str(refresh))
+
+    #     response.data = {'access': str(refresh.access_token), 'refresh': str(refresh)}
+    #     return response
 
     @action(methods=['POST'], detail=True, permission_classes=[IsAuthenticated], url_path='toggle-favourite-video')
     def toggle_favourite_video(self, request, pk=None):
@@ -59,7 +87,6 @@ class UserViewSet(ModelViewSet):
         try:
             video_id = request.POST.get('video_id')
             video = Video.objects.get(id=video_id)
-            print(request.data)
         except Video.DoesNotExist:
             raise NotFound('video not found')
         try:
