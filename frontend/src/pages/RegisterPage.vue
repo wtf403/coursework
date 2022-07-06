@@ -6,7 +6,7 @@
       <my-input class="form__input" :input="$store.state.inputs.nameInput" />
       <my-input class="form__input" :input="$store.state.inputs.emailInput" />
       <my-input class="form__input" :input="$store.state.inputs.passwordInput" />
-      <my-button class="form__btn" @click="logginHandler">Зарегистрироваться</my-button>
+      <my-button class="form__btn" @click="registerHandler">Зарегистрироваться</my-button>
       <my-button-outline class="form__btn" @click="$router.push('/sign-in')">Уже есть аккаунт?</my-button-outline>
     </sign-form>
   </main>
@@ -21,8 +21,7 @@ export default {
     return {};
   },
   methods: {
-    logginHandler() {
-      console.log('loggin')
+    registerHandler() {
     }
   },
 };

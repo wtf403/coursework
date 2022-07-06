@@ -10,7 +10,6 @@ const app = createApp(App);
 components.forEach((component) => {
   app.component(component.name, component);
 });
-
 directives.forEach((directive) => {
   app.directive(directive.name, directive);
 });

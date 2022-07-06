@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from '@/pages/RegisterPage';
+import MainPage from '@/pages/MainPage';
 import store from '@/store';
 
 const routes = [
@@ -28,7 +29,7 @@ const routes = [
   {
     path: '/',
     name: 'main',
-    component: () => import('@/pages/MainPage.vue'),
+    component: MainPage
   },
   {
     path: '/videos/:id',
