@@ -76,6 +76,7 @@ export default {
   position: absolute;
   width: 100%;
   inset: 5px;
+  border-radius: 12px;
   border: 0;
   padding-inline: 55px;
   inset: 0;

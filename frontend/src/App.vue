@@ -1,51 +1,89 @@
 <template>
   <header class="header">
-    <img class="header__logo" src="@/assets/logo-icon.svg" alt="Logotype" />
-    <my-input class="header__search" :input="$store.state.inputs.passwordInput" />
+    <img
+      class="header__logo"
+      @click="$router.push('/')"
+      src="@/assets/logo-icon.svg"
+      alt="Logotype"
+    />
     <nav class="header__navigation">
       <router-link class="header__link" to="/">Главная</router-link>
-      <router-link class="header__link" to="/about">О нас</router-link>
-      <router-link class="header__link" to="/sing-in">
-        <img :src="require('@/assets/logout-icon.svg')" alt="" />
-        Выйти
+      <router-link class="header__link" to="/about">О проекте</router-link>
+      <router-link
+        class="header__link"
+        v-if="!($store.state.isAuth) && $route.name != 'sign-in'"
+        to="/sign-in"
+      >
+        <img :src="require('@/assets/logout-icon.svg')" alt="Войти" />
+        <span>Вход</span>
+      </router-link>
+      <router-link
+        class="header__link"
+        v-if="!($store.state.isAuth) && $route.name != 'sign-up'"
+        to="/sign-up"
+      >
+        <img :src="require('@/assets/logout-icon.svg')" alt="Регистарция" />
+        <span>Регистрация</span>
+      </router-link>
+      <router-link
+        class="header__link"
+        v-if="$store.state.isAuth"
+        @click="logout"
+        to="/about"
+      >
+        <img :src="require('@/assets/logout-icon.svg')" alt="Выйти" />
+        <span>Выйти</span>
       </router-link>
     </nav>
   </header>
-  <main class="main">
-    <router-view />
-  </main>
+
+  <router-view />
+
   <footer class="footer">
-    <a class="footer__link">
+    <a class="footer__link" href="https://gitlab.com/maaaaath/courcework">
       <img class="footer__logo" src="@/assets/logo-icon.svg" alt="Logotype" />
       Ссылка на GitLab
     </a>
-      <p class="footer__text">
-        Курсвовой проект студента группы 211-321 Киселева Максима Романовича
-      </p>
-      <p class="footer__text">Московский политехничесий университет, 2022</p>
+    <p class="footer__text">Курсвовой проект студента группы 211-321 Киселева Максима Романовича</p>
+    <p class="footer__text">Московский политехничесий университет, 2022</p>
   </footer>
 </template>
 
 <script>
+import store from '@/store';
+
 export default {
   data() {
     return {};
+  },
+  methods: {
+    logout() {
+      store.state.isAuth = false;
+    }
   },
 };
 </script>
 
 <style lang="scss">
 #app {
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap');
-  background-color: #121829;
+  --accent-color: #7b6ef6;
+  --background-color: #121829;
+  background-color: var(--background-color);
   color: #c3c8d4;
-  font-family: Poppins;
+  font-family: Roboto;
+  font-size: clamp(0.75rem, 1vw + 0.5rem, 1.125rem);
   display: grid;
   grid-template-rows: min-content 1fr min-content;
+  gap: 2rem;
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
   padding: 0 120px;
+}
+@media (max-width: 768px) {
+  #app {
+    padding: 0 20px;
+  }
 }
 .header {
   display: flex;
@@ -53,12 +91,6 @@ export default {
   padding: 20px 0;
 }
 
-.header__logo {
-}
-
-.header__search {
-  min-width: 500px;
-}
 .header__navigation {
   display: flex;
   gap: 30px;
@@ -68,6 +100,7 @@ export default {
   text-decoration: none;
   color: inherit;
   display: inline-grid;
+  gap: 5px;
   grid-template-columns: max-content 1fr;
   align-items: center;
 }
@@ -75,6 +108,7 @@ export default {
 .footer {
   padding-top: auto;
   text-align: center;
+  padding-bottom: 1rem;
 }
 
 .footer__link {
@@ -82,13 +116,17 @@ export default {
   grid-template-columns: max-content 1fr;
   align-items: center;
   gap: 5px;
+  color: inherit;
 }
 
 .footer__logo {
   display: inline;
 }
 
-.footer__text {
+.main {
+  margin: 0 auto;
+  max-width: 1440px;
+  width: 100%;
 }
 
 /* Box sizing rules */
