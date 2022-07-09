@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import VideoList from '@/componensts/VideoList';
+import VideoList from '@/components/VideoList';
 import axios from 'axios';
 export default {
   components: {
