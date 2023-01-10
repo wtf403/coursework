@@ -14,11 +14,23 @@ python-dotenv = '^0.20.0'
 djangorestframework = '^3.13.1'
 djangorestframework-simplejwt = '^5.2.0'
 drf-nested-routers = {git = "https://github.com/alanjds/drf-nested-routers"}
-django-cors-headers = "^3.13.0"
+django-cors-headers = "3.13.0"
+drf-writable-nested = "^0.6.3"
+gunicorn = "20.1.0"
+drf-yasg = "^1.20.0"
+django-jazzmin = "^2.5.0"
+PyMySQL = "^1.0.2"
+mysqlclient = "^2.1.1"
+install = "^1.3.5"
+django-embed-video = "^1.4.4"
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.15.0"
 
 [build-system]
 requires = ['poetry-core']
 build-backend = 'poetry.core.masonry.api'
 
-[tool.poetry.scripts]
-dev = 'my_package_name:log_revision.py'
+[tool.poe.tasks.deploy]
+cmd = "rsync --archive --compress --delete --info=progress2 --exclude coursework.sqlite3 --exclude media/ ../backend/ poly:~/coursework/backend"
+help = "Build the project"

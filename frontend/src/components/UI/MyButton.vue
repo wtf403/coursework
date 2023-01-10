@@ -1,20 +1,21 @@
 <template>
   <button class="btn" type="submit">
-    <slot></slot>
+    <slot />
   </button>
 </template>
 <script>
 export default {
-    name: 'my-button', 
+  name: 'MyButton', 
 };
 </script>
 <style lang="scss">
-    .btn {
-        color: inherit;
-        border-radius: 12px;
-        background-color: var(--accent-color);
-        border: 2px solid transparent;
-        padding: 12px 20px;
-        text-align: center;
-    }
+.btn {
+  padding: 12px 20px;
+  color: inherit;
+  text-align: center;
+  background-color: var(--accent-color);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+}
 </style>

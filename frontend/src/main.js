@@ -4,6 +4,7 @@ import router from './router/router';
 import store from './store';
 import components from '@/components/UI';
 import directives from '@/directives';
+import VueSvgInlinePlugin from 'vue-svg-inline-plugin';
 
 const app = createApp(App);
 
@@ -14,4 +15,5 @@ directives.forEach((directive) => {
   app.directive(directive.name, directive);
 });
 
-app.use(router).use(store).mount('#app');
+
+app.use(router).use(store).use(VueSvgInlinePlugin).mount('#app');

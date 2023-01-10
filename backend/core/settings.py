@@ -30,24 +30,28 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
-    'https://example. com',
-    'https://sub.example.com',
+    'http://coursework.std-1724.ist.mospolytech',
     'http://localhost:8080',
     'http://127.0.0.1:8080',
+    'http://localhost:8081',
+    'http://127.0.0.1:8081'
 ]
-
+CORS_ALLOWED_ALL = False
+CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin', 
+    'embed_video',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'corsheaders',
     'authentication',
     'video',
     'video_type',
@@ -55,7 +59,8 @@ INSTALLED_APPS = [
     'director',
     'genre',
     'studio',
-    'comment' 
+    'comment',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -85,6 +90,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',    
             ],
         },
     },
@@ -98,12 +104,12 @@ AUTH_USER_MODEL = 'authentication.User'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': environ.get('NAME'),
-        'USER': environ.get('USER'),
-        'PASSWORD': environ.get('PASSWORD'),
-        'HOST': environ.get('HOST'),
-        'PORT': environ.get('PORT'),
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'std-mysql.ist.mospolytech.ru',
+        'NAME': 'std_1724_coursework',
+        'PASSWORD': '12345678',
+        'USER': 'std_1724_coursework',
+        'PORT': 3306,
     }
 }
 
@@ -124,7 +130,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+PASSWORD_HASHERS = [
+  'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -155,13 +163,16 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 12
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 24
 }
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -188,6 +199,12 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=10),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+JAZZMIN_SETTINGS = {
+    "hide_apps": ['Video_Type', 'Token_Blacklist'],
+    "order_with_respect_to": ["video", "comment", "authentication", "actor", "director"],
+     "site_header": "Library",
 }

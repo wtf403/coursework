@@ -4,44 +4,49 @@ from authentication.models import User
 from director.models import Director
 from actor.models import Actor
 from video.models import Video
+from django.contrib.auth.hashers import make_password
+from drf_writable_nested import WritableNestedModelSerializer
 
 
-class DirectorSerializerForUser(serializers.ModelSerializer):
+class DirectorSerializerForUser(WritableNestedModelSerializer, serializers.ModelSerializer):
     class Meta:
         model = Director
-        fields = '__all__'
+        fields = ['id', 'name']
+
         
-class ActorSerializerForUser(serializers.ModelSerializer):
+class ActorSerializerForUser(WritableNestedModelSerializer, serializers.ModelSerializer):
     class Meta:
         model = Actor
-        fields = '__all__'
+        fields =  ['id', 'name']
     
-class VideoSerializerForUser(serializers.ModelSerializer):
-    actors = ActorSerializerForUser(source='actor', many=True)
-    directors = DirectorSerializerForUser(source='director', many=True)
+class VideoSerializerForUser(WritableNestedModelSerializer, serializers.ModelSerializer):
     class Meta:
         model = Video
-        exclude = ['director', 'actor', 'genre', 'studio']
+        fields = ['id', 'title']
 
-class UserSerializer(serializers.ModelSerializer):
-    videos = VideoSerializerForUser(source='video', many=True)
-    directors = DirectorSerializerForUser(source='director', many=True)
-    actors = ActorSerializerForUser(source='actor', many=True)
+class UserSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    videos = VideoSerializerForUser(source='video', required=False)
+    directors = DirectorSerializerForUser(source='director', required=False)
+    actors = ActorSerializerForUser(source='actor', required=False)
 
     class Meta:
         model = User
-        exclude = ['is_active', 'is_staff', 'is_superuser']
+        exclude = ['is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions']
         extra_kwargs = {
             'password': {'write_only': True}
         }
-
     def create(self, validated_data):
         password = validated_data.pop('password', None)
-        instance = self.Meta.model(**validated_data)
-        instance.is_active = True
-
+        instance = self.Meta.model(
+            **validated_data
+        )
         if password is not None:
             instance.set_password(password)
+        instance.is_active = True
         instance.save()
             
         return instance
+
+    def update(self, instance, validated_data):
+        print('aldflajdslfj')
+        return super().update(instance, validated_data)

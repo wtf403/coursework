@@ -4,6 +4,7 @@ export default {
       rootMargin: '0px',
       threshold: 1.0,
     };
+    // eslint-disable-next-line no-unused-vars
     const callback = (entries, observer) => {
       if (entries[0].isIntersecting) {
         binding.value();

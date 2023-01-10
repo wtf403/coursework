@@ -3,8 +3,8 @@
     <h1>Страница с постами</h1>
     <my-input
       v-model="searchQuery"
-      placeholder="Поиск...."
       v-focus
+      placeholder="Поиск...."
     />
     <div class="app__btns">
       <my-button
@@ -23,12 +23,14 @@
       />
     </my-dialog>
     <post-list
+      v-if="!isPostsLoading"
       :posts="sortedAndSearchedPosts"
       @remove="removePost"
-      v-if="!isPostsLoading"
     />
-    <div v-else>Идет загрузка...</div>
-    <div v-intersection="loadMorePosts" class="observer"></div>
+    <div v-else>
+      Идет загрузка...
+    </div>
+    <div v-intersection="loadMorePosts" class="observer" />
     <!--    <div class="page__wrapper">-->
     <!--      <div-->
     <!--        v-for="pageNumber in totalPages"-->
@@ -46,19 +48,19 @@
 </template>
 
 <script>
-import PostForm from "@/components/PostForm";
-import PostList from "@/components/PostList";
-import MyButton from "@/components/UI/MyButton";
+import PostForm from '@/components/PostForm';
+import PostList from '@/components/PostList';
+import MyButton from '@/components/UI/MyButton';
 import axios from 'axios';
-import MySelect from "@/components/UI/MySelect";
-import MyInput from "@/components/UI/MyInput";
+import MySelect from '@/components/UI/MySelect';
+import MyInput from '@/components/UI/MyInput';
 
 export default {
   components: {
     MyInput,
     MySelect,
     MyButton,
-    PostList, PostForm
+    PostList, PostForm,
   },
   data() {
     return {
@@ -73,55 +75,21 @@ export default {
       sortOptions: [
         {value: 'title', name: 'По названию'},
         {value: 'body', name: 'По содержимому'},
-      ]
-    }
+      ],
+    };
   },
-  methods: {
-    createPost(post) {
-      this.posts.push(post);
-      this.dialogVisible = false;
+  computed: {
+    sortedPosts() {
+      return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]));
     },
-    removePost(post) {
-      this.posts = this.posts.filter(p => p.id !== post.id)
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
     },
-    showDialog() {
-      this.dialogVisible = true;
-    },
-    // changePage(pageNumber) {
-    //   this.page = pageNumber
-    // },
-    async fetchPosts() {
-      try {
-        this.isPostsLoading = true;
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-          params: {
-            _page: this.page,
-            _limit: this.limit
-          }
-        });
-        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-        this.posts = response.data;
-      } catch (e) {
-        alert('Ошибка')
-      } finally {
-        this.isPostsLoading = false;
-      }
-    },
-    async loadMorePosts() {
-      try {
-        this.page += 1;
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-          params: {
-            _page: this.page,
-            _limit: this.limit
-          }
-        });
-        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-        this.posts = [...this.posts, ...response.data];
-      } catch (e) {
-        alert('Ошибка')
-      }
-    }
+  },
+  watch: {
+    // page() {
+    //   this.fetchPosts()
+    // }
   },
   mounted() {
     this.fetchPosts();
@@ -137,20 +105,54 @@ export default {
     // const observer = new IntersectionObserver(callback, options);
     // observer.observe(this.$refs.observer);
   },
-  computed: {
-    sortedPosts() {
-      return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+  methods: {
+    createPost(post) {
+      this.posts.push(post);
+      this.dialogVisible = false;
     },
-    sortedAndSearchedPosts() {
-      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
-    }
+    removePost(post) {
+      this.posts = this.posts.filter(p => p.id !== post.id);
+    },
+    showDialog() {
+      this.dialogVisible = true;
+    },
+    // changePage(pageNumber) {
+    //   this.page = pageNumber
+    // },
+    async fetchPosts() {
+      try {
+        this.isPostsLoading = true;
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          },
+        });
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
+        this.posts = response.data;
+      } catch (e) {
+        alert('Ошибка');
+      } finally {
+        this.isPostsLoading = false;
+      }
+    },
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          },
+        });
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
+        this.posts = [...this.posts, ...response.data];
+      } catch (e) {
+        alert('Ошибка');
+      }
+    },
   },
-  watch: {
-    // page() {
-    //   this.fetchPosts()
-    // }
-  }
-}
+};
 </script>
 
 <style>

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import LoginPage from "@/pages/LoginPage";
+import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import MainPage from '@/pages/MainPage';
 import store from '@/store';
@@ -18,18 +18,18 @@ const routes = [
     name: 'sign-in',
     component: LoginPage,
     beforeEnter: () => {
-      store.state.isAuth ? router.push('/')  : '';
+      store.state.isAuth ? router.push('/') : '';
     },
   },
   {
     path: '/about',
     name: 'about',
-    component: () => import('@/pages/AboutPage.vue'),
+    component: () => import('@/pages/NotFoundPage.vue'),
   },
   {
     path: '/',
     name: 'main',
-    component: MainPage
+    component: MainPage,
   },
   {
     path: '/videos/:id',
@@ -48,7 +48,13 @@ const routes = [
   },
   {
     path: '/:pathMatch(.*)*',
-    name: 'not-found',
+    beforeEnter: (to, from, next) => {
+      next('/404');
+    },
+  },
+  {
+    path: '/404',
+    name: '404',
     component: () => import('@/pages/NotFoundPage.vue'),
   },
 ];
