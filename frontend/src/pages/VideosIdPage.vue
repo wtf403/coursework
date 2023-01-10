@@ -27,7 +27,7 @@
           class="information__favourites"
         >
           <span>
-            Добавить в избранное
+            Избранное
           </span>
           <img 
             class="information__icon information__icon--unactive"
@@ -35,6 +35,19 @@
             height="30"
             src="@/assets/star-icon.svg"
             alt="Иконка избранного">
+        </my-button-outline>
+        <my-button-outline 
+          @click="ModalWindowVisible = true"
+          v-if="$store.state.isAuth"
+          class="information__favourites">
+          <span>
+            Редактировать
+          </span>
+          <img class="information__icon"
+               v-svg-inline
+               height="35"
+               src="@/assets/edit-icon.svg"
+               alt="Иконка редактирования">
         </my-button-outline>
       </div>
       <div class="information__properties">
@@ -91,42 +104,12 @@
         </div>
       </div>
     </section>
-    <!-- <section v-if="$store.state.isAuth" class="video-page__comments comments">
-      <h2 class="visually-hidden">
-        Комментарии к видео
-      </h2>
-      <span class="comments__count">
-        <p class="comments__text">
-          Всего
-        </p>
-        <p v-if="true || isCommentsLoading || errorMassage" class="main__number">
-          (0)
-        </p>
-        <p v-else class="comments__number">
-          ({{totalCount}})
-        </p>
-      </span>
-      <textarea class="comments__input" placeholder="Ваш комментарий" />
-      <my-button class="comments__send">
-        Отправить
-      </my-button>
-      <div v-if="$store.state.isAuth" class="comments__item">
-        <img class="comments__user-image" src="" alt="">
-        <h3 class="comment__user-name" />
-        <p class="comment__text" />
-      </div>
-      <div v-if="!$store.state.isAuth" class="comments__item">
-        <div class="comments__user-image" />
-        <h3 class="comment__user-name">
-          Имя Фамилия
-        </h3>
-        <p class="comment__text">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere natus cumque aspernatur
-          quis ullam at repellat ab ipsa? Adipisci, ullam facilis. Facere id praesentium repellendus
-          iste odio expedita corrupti error!
-        </p>
-      </div>
-    </section> -->
+    <section>
+      <video-comments />
+    </section>
+    <modal-window v-model:showModalWindow="ModalWindowVisible">
+      <edit-video-info @close="closeModelWindow" :data="data" />
+    </modal-window>
   </main>
   <my-spinner v-if="isVideosLoading" class="main__spinner" />
   <div v-if="errorMassage && !isVideosLoading" class="main__load-error">
@@ -147,8 +130,16 @@
 
 <script>
 import axios from 'axios';
-
+import EditVideoInfo from '@/components/VideoPage/EditVideoInfo.vue';
+import ModalWindow from '@/components/UI/ModalWindow.vue';
+import VideoComments from '@/components/VideoPage/VideoComments.vue';
 export default {
+  components: {
+    EditVideoInfo,
+    ModalWindow,
+    VideoComments,
+  },
+
   name: 'VideoComponent',
   props: {
     video: Object,
@@ -156,7 +147,7 @@ export default {
   data() {
     return {
       isCommentsLoading: false,
-      dialogVisible: false,
+      ModalWindowVisible: false,
       data: [],
       infoFields: [],
     };
@@ -168,6 +159,9 @@ export default {
     this.fetchVideo();
   },
   methods: {
+    closeModelWindow() {
+      this.ModalWindowVisible = false;
+    },
     async fetchVideo() {
       try {
         const response = await axios.get(
@@ -185,7 +179,7 @@ export default {
             property: { ...this.data }.country,
           },
           {
-            title: 'Год выхода',
+            title: 'Дата выхода',
             property: { ...this.data }.release,
           },
           {
@@ -197,7 +191,7 @@ export default {
             property: { ...this.data }.fees,
           },
           {
-            title: 'Возраст',
+            title: 'Возрастное ограничение',
             property: { ...this.data }.age_restriction,
           },
         ];
@@ -277,7 +271,7 @@ export default {
 .information__image-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 @media (width <= 768px) {
@@ -288,7 +282,7 @@ export default {
 
 .information__favourites {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 1rem;
   font-size: clamp(1.125rem, 0.5vw + 1rem, 1.5rem);
@@ -296,6 +290,7 @@ export default {
 
 .information__icon {
   margin-bottom: 5px;
+  outline: none;
 }
 
 .information__icon--unactive {

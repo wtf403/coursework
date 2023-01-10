@@ -115,14 +115,6 @@
         "allowEmptyLines": false
       }
     ],
-    "vue/singleline-html-element-content-newline": [
-      "error",
-      {
-        "ignoreWhenNoAttributes": true,
-        "ignoreWhenEmpty": true,
-        "ignores": ["pre", "textarea", "a", "router-link"]
-      }
-    ],
     "vue/mustache-interpolation-spacing": ["error", "never"],
     "vue/no-template-shadow": "error",
     "vue/prop-name-casing": ["error", "camelCase"],

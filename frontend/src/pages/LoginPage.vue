@@ -4,7 +4,7 @@
     <h1 class="login__heading">
       Вход
     </h1>
-    <form-component class="login__form form" @submit.prevent>
+    <form class="login__form form" @submit.prevent>
       <my-input v-model="userEmail" class="form__input" :input="$store.state.inputs.emailInput" />
       <my-input
         v-model="userPassword"
@@ -23,16 +23,12 @@
       >
         Зарегистрироваться
       </my-button-outline>
-    </form-component>
+    </form>
   </main>
 </template>
 <script>
-import FormComponent from '@/components/FormComponent';
 import axios from 'axios';
 export default {
-  components: {
-    FormComponent,
-  },
   data() {
     return {
       isLoading: false,

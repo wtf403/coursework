@@ -4,7 +4,7 @@
     <h1 class="register__heading">
       Регистрация
     </h1>
-    <form-component class="register__form form" @submit.prevent>
+    <form class="register__form form" @submit.prevent>
       <my-input v-model="userName" class="form__input" :input="$store.state.inputs.nameInput" />
       <my-input v-model="userEmail" class="form__input" :input="$store.state.inputs.emailInput" />
       <my-input
@@ -24,16 +24,12 @@
       >
         Уже есть аккаунт?
       </my-button-outline>
-    </form-component>
+    </form>
   </main>
 </template>
 <script>
-import FormComponent from '@/components/FormComponent.vue';
 import axios from 'axios';
 export default {
-  components: {
-    FormComponent,
-  },
   data() {
     return {
       isLoading: false,
