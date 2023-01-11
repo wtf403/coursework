@@ -31,9 +31,7 @@
         <img :src="require('@/assets/logout-icon.svg')" alt="Выйти">
         <span>Выйти</span>
       </router-link>
-      <div class="heading__profile">
-        <img v-if="$store.state.isAuth" src="https://source.unsplash.com/random/50x50?sig=1" alt="User photo">
-      </div>
+      <a-avatar height="40" class="heading__profile" v-if="$store.state.isAuth" style="color: #f56a00; background-color: #fde3cf;">U</a-avatar>
     </nav>
   </header>
 
@@ -107,6 +105,10 @@ export default {
   scroll-behavior: smooth;
 }
 
+h1, h2, h3 {
+  color: white !important;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -155,6 +157,7 @@ export default {
   padding-bottom: 1rem;
   text-align: center;
 }
+
 
 .footer__link {
   display: inline-grid;

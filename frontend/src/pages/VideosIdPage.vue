@@ -267,6 +267,7 @@ export default {
 
 .information__heading {
   grid-column: 1 / -1;
+  color: white;
   font-size: 60px;
 }
 

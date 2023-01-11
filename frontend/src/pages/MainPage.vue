@@ -196,6 +196,7 @@ export default {
 
 .main__heading {
   grid-row: 1 / 2;
+  color: white;
 }
 
 .main__search {

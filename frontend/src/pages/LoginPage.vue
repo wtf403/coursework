@@ -78,6 +78,7 @@ export default {
 }
 
 .login__heading {
+  color: white;
   font-size: clamp(1.75rem, 3vw + 1rem, 4rem);
 }
 
