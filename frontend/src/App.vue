@@ -31,6 +31,9 @@
         <img :src="require('@/assets/logout-icon.svg')" alt="Выйти">
         <span>Выйти</span>
       </router-link>
+      <div class="heading__profile">
+        <img v-if="$store.state.isAuth" src="https://source.unsplash.com/random/50x50?sig=1" alt="User photo">
+      </div>
     </nav>
   </header>
 
@@ -111,6 +114,17 @@ export default {
   background-color: var(--darken-blur);
   box-shadow: 0 0 0 100vmax var(--darken-blur);
   clip-path: inset(0 -100vmax);
+}
+
+.heading__profile {
+  border-radius: 50%;
+  outline: 3px solid gray;
+
+  & > img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
 }
 
 .header__navigation {
