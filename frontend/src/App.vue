@@ -10,7 +10,7 @@
     </a>
     <nav class="header__navigation">
       <router-link class="header__link" to="/">Главная</router-link>
-      <router-link class="header__link" to="/about">О проекте</router-link>
+      <router-link class="header__link about" to="/about">О проекте</router-link>
       <router-link
         v-if="!$store.state.isAuth && $route.name != 'sign-in'"
         class="header__link"
@@ -104,11 +104,13 @@ export default {
   font-size: clamp(0.5rem, 1vw + 0.5rem, 1.125rem);
   font-family: 'Roboto', sans-serif;
   background-color: var(--background-color);
+  scroll-behavior: smooth;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 100vm;
   padding: 20px 0;
   background-color: var(--darken-blur);
@@ -127,8 +129,14 @@ export default {
   }
 }
 
+.about  {
+  margin-right: auto;
+}
+
 .header__navigation {
   display: flex;
+  padding-left: 2rem;
+  flex-grow: 1;
   gap: clamp(0.313rem, 1vw, 0.938rem);
 }
 

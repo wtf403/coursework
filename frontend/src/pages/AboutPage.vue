@@ -1,17 +1,22 @@
 <template>
-  <h1 class="about__heading">Подберите фильм или сериал по вкусу</h1> 
   <div class="about__video">
     <video playsinline autoplay muted loop src="@/../public/film-counter.mp4" id="backgroundVideo" />
   </div>
+  <h1 class="about__heading">Подбери фильм или сериал под своё настроение</h1>
 
-  <img class="about__down" v-svg-inline height="60" src="@/assets/arrows-down.svg" alt="К контенту">
-  <p class="about__text">
+  <a href="#text">
+    <img class="about__down" v-svg-inline height="60" src="@/assets/arrows-down.svg" alt="К контенту">
+  </a>
+  <my-button-outline @click="$router.push('/')" class="calltoaction">
+    Перейти в каталог 
+  </my-button-outline>
+  <p class="about__text" id="text">
     Поиск новых и интересных фильмов и сериалов может быть трудным, но с правильными рекомендациями это может стать намного проще! Здесь вы найдете самые последние и лучшие фильмы и сериалы, чтобы поднять ваше настроение. От драм и комедий до мультфильмов и триллеров - мы предлагаем вам все и готовы помочь вам найти правильный фильм или сериал для вашего вкуса!
   </p>
   <div class="about__images">
-    <img class="about__proto" src="" alt="">
-    <img class="about__proto" src="" alt="">
-    <img class="about__proto" src="" alt="">
+    <img class="about__proto" src="https://burst.shopifycdn.com/photos/a-film-reel-lays-tangled-against-a-white-background.jpg?width=925&format=pjpg&exif=1&iptc=1" alt="">
+    <img class="about__proto" src="https://burst.shopifycdn.com/photos/film-reel-taggled-against-a-white-background.jpg?width=925&format=pjpg&exif=1&iptc=1" alt="">
+    <img class="about__proto" src="https://burst.shopifycdn.com/photos/a-film-reel-lays-flat-catching-the-sunlight.jpg?width=925&format=pjpg&exif=1&iptc=1" alt="">
   </div>
 </template>
 <script>
@@ -20,18 +25,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+body {
+  scroll-behavior: smooth;
+}
+
 .about__heading {
-  margin-top: 2rem;
   color: white;
   font-weight: 700;
-  font-size: 2.5em;
+  font-size: clamp(1.75rem, 5vw + 0.5rem, 4.313rem);
   text-align: center;
 }
 
 .about__video {
   position: absolute;
-  top: 20vh;
+  top: 18vh;
   right: 0;
+  bottom: 15vh;
   left: 0;
   background:
     repeating-radial-gradient(#000000 0 0.0001%, #ffffff 0 0.0002%) 50% 0/2500px 2500px,
@@ -48,13 +57,17 @@ export default {
 
 #backgroundVideo {
   width: 100%;
-  padding: 5rem;
+  object-fit: cover;
+  height: 100%;
+  padding: clamp(1.75rem, 5vw + 0.5rem, 4.313rem);
+  border-radius: 12px;
 }
 
 .about__down {
   position: absolute;
   bottom: 5rem;
   left: 50%;
+  color: white;
   transform: translateX(-50%);
   animation: arrows 1s infinite alternate;
 }
@@ -73,9 +86,25 @@ export default {
   }
 }
 
-.about__text {
+.calltoaction {
   margin-top: 100vh;
+  font-size: clamp(0.75rem, 5vw + 0.5rem, 3.313rem);
+}
+
+.about__text {
   font-size: 2rem;
   text-align: center;
+}
+
+.about__images {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-block: 5rem;
+}
+
+.about__phtoto {
+  display: block;
+  width: 100%;
 }
 </style>
