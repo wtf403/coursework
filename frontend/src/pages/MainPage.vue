@@ -14,18 +14,23 @@
       <my-switch v-model="currentCategory" class="main__category" :navigation="'arrow'" :options="categories" />
       <my-select v-model="sortValue" class="main__select" :options="sortOptions" />
     </div>
-    <span class="main__count">
-      <p class="main__text">
-        Всего
-      </p>
-      <p v-if="isVideosLoading || errorMassage" class="main__number">
-        (0)
-      </p>
-      <p v-else class="main__number">
-        ({{totalCount}})
-      </p>
-    </span>
-    <div class="main__video-list">
+    <div class="main__helpers">
+      <span class="main__count">
+        <p class="main__text">
+          Всего
+        </p>
+        <p v-if="isVideosLoading || errorMassage" class="main__number">
+          (0)
+        </p>
+        <p v-else class="main__number">
+          ({{totalCount}})
+        </p>
+      </span>
+      <my-button-outline @click="fetchVideos" class="main__refresh">
+        <img v-svg-inline src="@/assets/refresh-icon.svg" alt="Refresh video list"> 
+      </my-button-outline>
+    </div>
+    <section class="main__video-list">
       <video-sceleton v-if="isVideosLoading" class="main__video-item" v-bind:key="id" v-for="id in 24"  />
       <video-item
         v-for="video in sortedAndSearchedVideos"
@@ -34,7 +39,7 @@
         class="main__video-item"
         :video="video"
       />
-    </div>
+    </section>
     <my-switch
       v-model="currentPage"
       class="main__pages"
@@ -218,7 +223,13 @@ export default {
   justify-self: end;
 }
 
-/* Всего */
+.main__helpers {
+  display: flex;
+  grid-column: span 2;
+  justify-content: space-between;
+}
+
+svg { outline: none; }
 
 .main__count {
   display: inline-flex;
@@ -268,7 +279,6 @@ export default {
 
   .main__count {
     grid-row: 1 / 2;
-    margin-left: auto;
   }
 
   .main__video-list {

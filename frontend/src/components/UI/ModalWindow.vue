@@ -61,7 +61,7 @@ export default {
 }
 
 .modal__content {
-  min-width: min(95vw, 600px);
+  min-width: min(95vw, 800px);
   padding: 1rem 2rem;
 }
 </style>

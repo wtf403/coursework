@@ -1,136 +1,98 @@
 /* stylelint-disable block-no-empty */
 <template>
-  <main class="video-page">
-    <section class="video-page__video video">
-      <iframe
-        class="video__iframe"
-        :src="`${data.video_url}`"
-        title="YouTube video player"
-        frameborder="0"
-        allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      />
-    </section>
-    <section class="video-page__information information">
-      <h1 class="information__heading">
-        {{data.title}}
-      </h1>
-      <div class="information__image-wrapper">
-        <img
-          class="information__image"
-          :src="data.image_url"
-          :srcset="data.image_url_x2"
-          :alt="Обложка - `${data.title}`"
-        >
-        <my-button-outline
-          @click="toggleFavouriteVideo"
-          v-if="$store.state.isAuth"
-          class="information__favourites"
-        >
-          <span>
-            Избранное
-          </span>
-          <img 
-            class="information__icon information__icon--unactive"
-            v-svg-inline
-            height="30"
-            src="@/assets/star-icon.svg"
-            alt="Иконка избранного">
-        </my-button-outline>
-        <my-button-outline 
-          @click="ModalWindowVisible = true"
-          v-if="$store.state.isAuth"
-          class="information__favourites">
-          <span>
-            Редактировать
-          </span>
-          <img class="information__icon"
-               v-svg-inline
-               height="35"
-               src="@/assets/edit-icon.svg"
-               alt="Иконка редактирования">
-        </my-button-outline>
-      </div>
-      <div class="information__properties">
-        <p class="information__description">
-          {{data.description}}
-        </p>
-        <div class="information__row">
-          <p class="information__title">
-            Режисёры:
-          </p>
-          <div class="information__list">
-            <router-link
-              v-for="director in data.directors"
-              class="information__value"
-              v-bind:key="director.id"
-              :to="`/actors/${director.id}`"
-            >
-              {{director.name}}:
-            </router-link>
-          </div>
+  <div class="video-page">
+    <main class="video-page">
+      <section class="video-page__video video">
+        <iframe
+          class="video__iframe"
+          :src="`${data.video_url}`"
+          title="YouTube video player"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        />
+      </section>
+      <section class="video-page__information information">
+        <h1 class="information__heading">
+          {{data.title}}
+        </h1>
+        <div class="information__image-wrapper">
+          <img
+            class="information__image"
+            :src="data.image_url"
+            :srcset="data.image_url_x2"
+            :alt="Обложка - `${data.title}`"
+          >
+          <my-button-outline
+            @click="toggleFavouriteVideo"
+            v-if="$store.state.isAuth"
+            class="information__favourites"
+          >
+            <span>
+              Избранное
+            </span>
+            <img 
+              class="information__icon information__icon--unactive"
+              v-svg-inline
+              height="30"
+              src="@/assets/star-icon.svg"
+              alt="Иконка избранного">
+          </my-button-outline>
+          <my-button-outline 
+            @click="ModalWindowVisible = true"
+            v-if="$store.state.isAuth"
+            class="information__favourites">
+            <span>
+              Редактировать
+            </span>
+            <img class="information__icon"
+                 v-svg-inline
+                 height="35"
+                 src="@/assets/edit-icon.svg"
+                 alt="Иконка редактирования">
+          </my-button-outline>
         </div>
-        <div class="information__row">
-          <p class="information__key">
-            Aктёры:
-          </p>
-          <div class="information__list">
-            <router-link
-              v-for="actor in data.actors"
-              class="information__value"
-              v-bind:key="actor.id"
-              :to="`/actors/${actor.id}`"
-            >
-              {{actor.name}}
-            </router-link>
-          </div>
-        </div>
-        <div class="information__row">
-          <p class="information__key">
-            Жанры:
-          </p>
-          <div class="information__list">
-            <p v-for="genre in data.genres" v-bind:key="genre" class="information__value">
-              {{genre.title}}
+        <div class="information__properties">
+          <div class="information__row" v-for="row in info" v-bind:key="row">
+            <p v-if="row.key != null" class="information__key">
+              {{row.key}}
+            </p>
+            <ul v-if="typeof row.value == 'object' " class="information__value">
+              <li class="information__list" v-bind:key="i.id" v-for="i of row.value">{{Object.values(i).slice(-1)[0]}}</li>
+            </ul>
+            <p v-else class="information__value">
+              {{row.value}}
             </p>
           </div>
         </div>
-        <div class="information__row" v-for="row in infoFields" v-bind:key="row">
-          <p class="information__key">
-            {{row.title}}:
-          </p>
-          <p class="information__value">
-            {{row.property}}
-          </p>
-        </div>
-      </div>
-    </section>
-    <section>
-      <video-comments />
-    </section>
-    <modal-window v-model:showModalWindow="ModalWindowVisible">
-      <edit-video-info @close="closeModelWindow" :data="data" />
-    </modal-window>
-  </main>
-  <my-spinner v-if="isVideosLoading" class="main__spinner" />
-  <div v-if="errorMassage && !isVideosLoading" class="main__load-error">
-    <h2 class="main__error-title">
-      Ошибка загрузки видео
-    </h2>
-    <p class="main__error-massage">
-      {{errorMassage}}
-    </p>
-    <my-button-outline
-      class="main__error-button"
-      @click="refatchVideos"
-    >
-      Повторить попытку
-    </my-button-outline>
+      </section>
+      <section>
+        <video-comments />
+      </section>
+      <modal-window v-model:showModalWindow="ModalWindowVisible">
+        <edit-video-info @close="closeModelWindow" v-model:data="data" v-model:info="info" />
+      </modal-window>
+    </main>
+    <my-spinner v-if="isVideosLoading" class="main__spinner" />
+    <div v-if="errorMassage && !isVideosLoading" class="main__load-error">
+      <h2 class="main__error-title">
+        Ошибка загрузки видео
+      </h2>
+      <p class="main__error-massage">
+        {{errorMassage}}
+      </p>
+      <my-button-outline
+        class="main__error-button"
+        @click="refatchVideos"
+      >
+        Повторить попытку
+      </my-button-outline>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import EditVideoInfo from '@/components/VideoPage/EditVideoInfo.vue';
+import EditVideoInfo from '@/components/VideoPage/EditVideoForm.vue';
 import ModalWindow from '@/components/UI/ModalWindow.vue';
 import VideoComments from '@/components/VideoPage/VideoComments.vue';
 export default {
@@ -149,7 +111,7 @@ export default {
       isCommentsLoading: false,
       ModalWindowVisible: false,
       data: [],
-      infoFields: [],
+      info: [],
     };
   },
   computed: {},
@@ -169,32 +131,76 @@ export default {
         );
         this.data = response.data;
 
-        this.infoFields = [
-          {
-            title: 'Продолжительность',
-            property: { ...this.data }.duration,
+        this.info = {
+          'description': {
+            key: null,
+            value: this.data.description,
+            input: 'textarea',
           },
-          {
-            title: 'Cтрана',
-            property: { ...this.data }.country,
+          'directors': {
+            key: 'Режисёры:',
+            value: this.data.directors,
+            options: [{id: 1, name: 'one'}, {id: 2, name: 'two'}, {id: 3, name: 'three'}, {id: 4, name: 'four'}],
+            input: 'multiselect',
+            track: 'name',
           },
-          {
-            title: 'Дата выхода',
-            property: { ...this.data }.release,
+          'actors': {
+            key: 'Актеры:',
+            value: this.data.actors,
+            options: [{id: 1, name: 'one'}, {id: 2, name: 'two'}, {id: 3, name: 'three'}, {id: 4, name: 'four'}],
+            input: 'multiselect',
+            track: 'name',
           },
-          {
-            title: 'Бюджет',
-            property: { ...this.data }.budget,
+          'genres': {
+            key: 'Жанры:',
+            value: this.data.genres,
+            input: 'multiselect',
+            options: [{id: 1, title: 'one'}, {id: 2, title: 'two'}, {id: 3, title: 'three'}, {id: 4, title: 'four'}],
+            track: 'title',
           },
-          {
-            title: 'Сборы',
-            property: { ...this.data }.fees,
+          'duration': {
+            key: 'Продолжительность:',
+            value: this.data.duration,
+            input: 'input',
+            type: 'time',
+            step: '1',
           },
-          {
-            title: 'Возрастное ограничение',
-            property: { ...this.data }.age_restriction,
+          'country': {
+            key: 'Cтрана:',
+            value: this.data.country,
+            input: 'input',
+            type: 'text',
           },
-        ];
+          'release': {
+            key: 'Дата выхода:',
+            value: this.data.release,
+            input: 'input',
+            type: 'date',
+            min: '1900-01-01',
+            max: '2030-01-01',
+          },
+          'budget': {
+            key: 'Бюджет:',
+            value: this.data.budget,
+            input: 'input',
+            type: 'text',
+          },
+          'fees': {
+            key: 'Сборы:',
+            value: this.data.fees,
+            input: 'input',
+            type: 'text',
+          },
+          'age_restriction': {
+            key: 'Возрастное ограничение:',
+            value: this.data.age_restriction,
+            input: 'input',
+            type: 'number',
+            inputmode: 'numeric',
+            min: 0,
+            max: 99,
+          },
+        };
       } catch (e) {
         this.errorMassage = e.message;
       } finally {
@@ -219,6 +225,7 @@ export default {
           })
           .finally(() => {
             window.localStorage.setItem('isAuth', this.$store.state.isAuth);
+            window.localStorage.setItem('userId', this.$store.state.userId);
           });
       }
     },
@@ -319,6 +326,10 @@ export default {
   gap: 1em;
 }
 
+.information__row:nth-child(1) > .information__value {
+  text-align: start;
+}
+
 .information__row:last-of-type > .information__value::after {
   content: '+';
 }
@@ -333,6 +344,7 @@ export default {
 }
 
 .information__value {
+  margin-top: 0;
   color: white;
   text-align: end;
 }

@@ -61,6 +61,7 @@ export default {
   },
   created() {
     this.$store.state.isAuth = window.localStorage.getItem('isAuth') === 'true';
+    this.$store.state.userId = window.localStorage.getItem('userId');
   },
   mounted() {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');

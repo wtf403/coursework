@@ -59,6 +59,7 @@ export default {
         }).finally(() => {
           this.isLoading = false;
           window.localStorage.setItem('isAuth', this.$store.state.isAuth);
+          window.localStorage.setItem('userId', this.$store.state.userId);
         });
     },
   },
