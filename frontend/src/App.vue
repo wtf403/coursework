@@ -135,9 +135,9 @@ export default {
 
 .header__navigation {
   display: flex;
-  padding-left: 2rem;
   flex-grow: 1;
   gap: clamp(0.313rem, 1vw, 0.938rem);
+  padding-left: 2rem;
 }
 
 .header__link {

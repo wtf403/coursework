@@ -18,10 +18,83 @@
     <img class="about__proto" src="https://burst.shopifycdn.com/photos/film-reel-taggled-against-a-white-background.jpg?width=925&format=pjpg&exif=1&iptc=1" alt="">
     <img class="about__proto" src="https://burst.shopifycdn.com/photos/a-film-reel-lays-flat-catching-the-sunlight.jpg?width=925&format=pjpg&exif=1&iptc=1" alt="">
   </div>
+  <v-content>
+    <v-card class="mx-auto" max-width="344">
+      <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px" cover />
+      
+      <v-card-title>
+        Top western road trips
+      </v-card-title>
+      
+      <v-card-subtitle>
+        1,000 miles of wonder
+      </v-card-subtitle>
+      
+      <v-card-actions>
+        <v-btn color="orange-lighten-2" variant="text">
+          Explore
+        </v-btn>
+      
+        <v-spacer />
+      
+        <v-btn :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="show = !show" />
+      </v-card-actions>
+      
+      <v-expand-transition>
+        <div v-show="show">
+          <v-divider />
+      
+          <v-card-text>
+            I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for
+            sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add
+            a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+          </v-card-text>
+        </div>
+      </v-expand-transition>
+    </v-card>
+    <div class="feedback">
+      <div class="feedback__wrapper">
+        <p class="feedback__subtitle">Ваша рецензия</p>
+        <h2 class="feedback__title">Поделитесь своим мнением<br>о Magical Misadventures</h2>
+        <form class="feedback__form" onsubmit="event.preventDefault()">
+          <!-- <div class="feedback__field">
+                            <label for="feedbackName" class="feedback__label">Ваше имя</label>
+                            <input v-model="name" type="text" id="feedbackName" class="feedback__input" required>
+                        </div> -->
+          <div class="feedback__field">
+            <v-text-field v-model="name"
+                          :rules="nameRules"
+                          label="Имя пользователя*"
+                          solo
+                          required
+                          append-icon="mdi-account" />
+          </div>
+          <div class="feedback__field">
+            <v-textarea clearable
+                        v-model="comment"
+                        required
+                        solo
+                        name="CommentInput"
+                        label="Текст комментария*" />
+          </div>
+          <!-- <div class="feedback__field">
+                            <label for="feedbackComment" class="feedback__label">Ваш комментарий</label>
+                            <textarea v-model="comment" id="feedbackComment" style="resize: vertical" rows="6"
+                                class="feedback__input" required></textarea>
+                        </div> -->
+          <button class="feedback__button" @click="SendComment()">Отправить</button>
+        </form>
+      </div>
+    </div>
+  </v-content>
 </template>
 <script>
-
 export default {
+  data() {
+    return {
+      show: true,
+    }; 
+  },
 };
 </script>
 <style lang="scss" scoped>

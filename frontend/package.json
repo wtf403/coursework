@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "deploy": "rsync --archive --compress --delete --info=progress2 dist/ poly:~/coursework/frontend",
+    "deploy": "rsync --archive --compress --delete --info=progress2 dist/ poly:~/webexam2023/frontend",
     "lint": "npm-run-all --parallel -c lint:*",
     "lint:stylelint": "stylelint **/*.vue",
     "lint:eslint": "eslint --ext .vue src/",
@@ -30,6 +30,7 @@
     "vue-router": "^4.0.3",
     "vue-svg-inline-plugin": "^2.2.2",
     "vue-template-compiler": "^2.6.14",
+    "vuetify": "^3.1.1",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
