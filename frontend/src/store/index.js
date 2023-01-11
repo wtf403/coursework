@@ -2,7 +2,6 @@ import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    isAuth: false,
     userId: 0,
     inputs: {
       nameInput: {
@@ -26,9 +25,31 @@ export default createStore({
         placeholderText: 'Введите название',
       },
     },
+    comments: [],
+    setCommentsLoading: false,
   },
-  getters: {},
-  mutations: {},
-  actions: {},
+  getters: {
+    allComments(state) {
+      return state.comments;
+    },
+  },
+  mutations: {
+    setCommentsLoading(state, bool) {
+      state.commentsLoading = bool;
+    },
+    setComments(state, comments) {
+      state.comments = comments;
+    },
+
+  },
+  actions: {
+    async fetchComments(ctx) {
+      ctx.commit('setCommentsLoading', true);
+      const res = await fetch('https://jsonplaceholder.typicode.com/comments?_limit=5');
+      const comments = await res.json();
+      ctx.commit('setComments', comments);
+      ctx.commit('setCommentsLoading', false);
+    },
+  },
   modules: {},
 });

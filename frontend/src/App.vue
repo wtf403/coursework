@@ -37,7 +37,7 @@
   <router-view class="main" />
 
   <footer class="footer">
-    <a class="footer__link" href="https://gitlab.com/maaaaath/courcework">
+    <a class="footer__link" href="https://github.com/wtf403/coursework">
       <img class="footer__logo" src="@/assets/logo-icon.svg" alt="Logotype">
       Ссылка на GitLab
     </a>

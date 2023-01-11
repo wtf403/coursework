@@ -4,7 +4,7 @@
       <h2 class="comments__title">
         Комментарии
       </h2>
-      <span class="comments__count">Всего ({{comments.length ?? 0}})</span>
+      <span class="comments__count">Всего ({{$store.getters.allComments.length ?? 0}})</span>
     </div>
     <form class="comments__form" action="" @submit.prevent>
       <input type="hidden" name="user">
@@ -19,9 +19,9 @@
       </div>
     </form>
     <section class="comments__section" v-if="$store.state.isAuth">
-      <div v-for="comment in comments" v-bind:key="comment.userId" class="comments__block">
-        <h3 class="comment__username">User #{{comment.userId}}</h3>
-        <pre class="comment__text">{{comment.text}}</pre>
+      <div v-for="comment in $store.getters.allComments" v-bind:key="comment.userId" class="comments__block">
+        <h3 class="comment__username">{{comment.email}}</h3>
+        <pre class="comment__text">{{comment.body}}</pre>
       </div>
     </section>
   </section>
@@ -46,6 +46,9 @@ export default {
         text: this.inputText,
       });
     },
+  },
+  mounted() {
+    this.$store.dispatch('fetchComments');
   },
 };
 </script>

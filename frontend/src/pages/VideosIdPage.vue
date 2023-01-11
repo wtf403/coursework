@@ -381,8 +381,18 @@ export default {
     font-size: 18pt !important;
   }
 
+  .information__image {
+    width: 200pt !important;
+    height: 300pt !important;
+  }
+
   .comments {
     display: none;
+    page-break-before: always !important;
+  }
+
+  .comments__form {
+    display: none !important;
   }
 
   .information__favourites {
